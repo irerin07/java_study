@@ -1,6 +1,10 @@
 # Java Study
+이 저장소의 목적은 자바를 공부하면서 남들에게 쉽게 설명할 수 있을때까지 유지, 보수 하면서 만들어 나가는 것입니다.<br/>
+
+## 목차
 1. [JVM](https://github.com/irerin07/java_study#01-jvm-%EC%9E%90%EB%B0%94-%EA%B0%80%EC%83%81-%EB%A8%B8%EC%8B%A0)
-2. [참조타입](https://github.com/irerin07/java_study#02-%EC%B0%B8%EC%A1%B0-%ED%83%80%EC%9E%85)
+2. [참조 타입](https://github.com/irerin07/java_study#02-%EC%B0%B8%EC%A1%B0-%ED%83%80%EC%9E%85)
+3. [메모리 영역]()
 
 ## 01 JVM 자바 가상 머신
 자바 프로그램은 완전한 기계어가 아닌, 중간 단계의 바이트 코드라 이를 해석하고 실행해 줄 가상의 운영체제가 필요하다.<br/>
@@ -37,12 +41,12 @@ String name = "Mike";
 ```
 String클래스 변수인 name은 힙 영역의 String 객체 주소 값을 가지고 있고 이 주소를 통해 객체를 참조하기때문에 String 클래스 변수를 참조 타입 변수라 한다.
 
-### 메모리 사용 영역
+##03 메모리 영역
 ![RuntimeDataArea](./image/RuntimeDataAreas.png)<br/>
 java.exe로 JVM이 시작되면 JVM은 운영체제에서 할당받은 메모리 영역을 위와 같은 세부 영역으로 구분해서 사용한다.<br/>
 Pc Register, JVM Stack, Native Method Stack은 스레드 마다 하나씩 생성되고 Heap, Method Area, 런타임 상수 풀은 모든 스레드가 공유해서 사용한다.  
 
-### 메소드 영역
+### 메소드 영역 Method Area
 - 코드에서 사용되는 클래스(~.class)들을 클래스 로더로 읽어 클래스별로 런타임 상수 풀, 필드 데이터, 메소드 데이터, 메소드 데이터, 메소드 코드, 생성자 코드 등을 분류해서 저장한다.
 - JVM이 시작할 때 생성된다.
 #### 클래스 로더
@@ -57,5 +61,32 @@ Class Loader가 아직 로드되지 않은 클래스를 찾으면 위와 같은 
 - Verifying – 읽어 들인 클래스가 자바 언어 명세(Java Language Specification) 및 JVM명세에 명시된 대로 잘 구성되어 있는지 검사한다.
 - Preparing – 클래스가 필요로 하는 메모리를 할당, 클래스에서 정의된 필드, 메서드, 인터페이스들을 나타내는 데이터 구조를 준비한다.
 - Resolving – 클래스의 상수 풀 내 모든 심볼릭 레퍼런스를 다이렉트 레퍼런스로 변경한다.
+   * 심볼릭 레퍼런스 -  객체를 가져오기 위해 사용되는 문자열
 - Initializing – 클래스 변수들을 적절한 값으로 초기화. Static Initializer들을 수행하고 static 필드들을 설정된 값으로 초기화 한다.  
+
+### 힙영역
+- 객체와 배열이 생성되는 영역.
+- 이곳에 생성된 객체와 배열은 JVM의 스택 영역의 변수나 다른 객체의 필드에서 참조한다.
+- 참조하는 변수나 필드가 없다면 객체로서의 의미가 없기 때문에 JVM은 이를 Garbage Collector를 실행시켜 힙 영역에서 자동으로 제거한다.
+ 
+### JVM Stack 영역
+- 각 스레드마다 하나씩 존재하고, 스레드가 시작될 때 할당된다.
+- 프로그램에서 추가적으로 스레드를 생성하지 않았다면 main 스레드만 존재하므로 JVM스택 역시 하나만 존재한다.
+- Stack Frame이라는 구조체를 저장하는 스택
+- JVM은 메소드를 호출할 때마다 JVM스택에 Stack Frame을 추가(Push)하고 메소드가 종료되면 해당 프레임을 제거(Pop)하는 동작만 수행
+- Stack Trace의 각 라인은 하나의 스택 프레임을 표현한다.
+
+![JvmStack](./image/JVMSTACK.png)
+#### Local Variable Array: 지역변수 배열
+- 0부터 시작하는 인덱스를 가진 배열
+- 0은 메서드가 속한 클래스 인스턴스의 this 레퍼런스
+- 1부터는 메서드에 전달된 파라미터들이 저장된다.
+- 그 이후로는 메서드의 지역 변수들이 저장된다.
+#### Operand Stack: 피연산자 스택
+- 메서드의 실제 작업 공간
+- 각 메서드는 피연산자 스택과 지역 변수 배열 사이에서 데이터를 교환하고, 다른 메서드 호출 결과를 추가하거나(push) 꺼낸다(pop).
+- 피연산자 스택 공간이 얼마나 필요한지는 컴파일할 때 결정할 수 있으므로, 피연산자 스택의 크기도 컴파일 시에 결정된다.
+#### Reference to Constant Pool: 현재 실행 중인 메서드가 속한 클래스의 런타임 상수 풀에 대한 레퍼런스
+- 
+
 [맨위로](https://github.com/irerin07/java_study#java-study)
