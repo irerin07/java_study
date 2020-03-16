@@ -41,6 +41,22 @@ String name = "Mike";
 ```
 String클래스 변수인 name은 힙 영역의 String 객체 주소 값을 가지고 있고 이 주소를 통해 객체를 참조하기때문에 String 클래스 변수를 참조 타입 변수라 한다.
 
+### 참조 변수의 ==, != 연산
+참조 타입 변수들 간 ==, != 연산은 동일한 객체를 참조하는지 알아볼 때 사용된다.
+참조 타입 변수는 힙 영역의 객체 주소이므로 주소값을 비교한다.
+동일한 객체를 참조하는 경우 == 연산은 true를 반환하고 != 연산은 false를 반환한다.
+
+### Null, NullPointerException
+참조 타입의 변수는 아무런 객체를 참조하지 않는다는 뜻으로 null값을 가질 수 있다.
+null 값도 초기값으로 사용할 수 있어서 null로 초기화 된 참조 변수는 스택 영역에 생성된다.
+참조 타입의 변수가 null을 가지는 경우에는 아무런 객체도 참조하지 않고 있으므로 사용할 수 없다.
+하지만 실수로 null값을 가지고 있는 참조 타입 변수를 사용하면 NullPointerException이 발생한다.
+
+### String 타입
+
+
+[맨위로](https://github.com/irerin07/java_study#java-study)
+
 ## 03 메모리 영역
 java.exe로 JVM이 시작되면 JVM은 운영체제에서 할당받은 메모리 영역을 위와 같은 세부 영역으로 구분해서 사용한다.<br/>
 Pc Register, JVM Stack, Native Method Stack은 스레드 마다 하나씩 생성되고 Heap, Method Area, 런타임 상수 풀은 모든 스레드가 공유해서 사용한다.  
