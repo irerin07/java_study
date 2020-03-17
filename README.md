@@ -53,9 +53,226 @@ null 값도 초기값으로 사용할 수 있어서 null로 초기화 된 참조
 하지만 실수로 null값을 가지고 있는 참조 타입 변수를 사용하면 NullPointerException이 발생한다.
 
 ### String 타입
+- 자바는 문자열을 String 변수에 저장한다.
+    * 조금 더 정확히 말하자면 문자열은 String 객체로 생성되고 변수는 String 객체를 참조한다.
+```
+String name = "Mike";
+String hobby;
+hobby = "singing";
+```
+- 위 코드에서 name 변수와 hobby 변수는 스택 영역에 생성이 되고 문자열 리터럴 "Mike"와 "singing"은 힙 영역에 String 객체로 생성되고<br/>
+name변수와 hobby변수에 String 객체의 주소값이 저장된다.
+
+```
+String name1 = "Tom";
+String name2 = "Tom";
+```
+- 위와 같이 name1과 name2 변수가 동일한 문자열을 참조하는 경우 두 변수는 동일한 String객체를 참조한다.
+- 하지만 new 연산자를 사용해 새로운 객체를 만들면 서로 다른 String객체를 참조하게 된다.
+- 문자열만을 비교하고자 할때는 ==연산이 아니라 .equals() 메서드를 사용한다.
+```
+Boolean res = name1.equals(name2);
+```
+- String 변수는 참조 타입이므로 초기값에 null을 대입할 수 있다.
+
+### 배열 타입
+- 저장할 데이터가 많은 경우 각각의 데이터마다 변수를 지정해 주는 것은 굉장히 비효율적이다.
+    - 예를들어 학생 50명의 데이터를 저장하기 위해 50개의 변수를 선언하는것은 그리 좋은 방법은 아닐것이다.
+- 배열은 같은 타입의 데이터를 연속된 공간에 나열시키고 각 데이터에 인덱스를 부여한 자료구조이다.
+
+#### 배열 선언
+```
+타입[] 변수;
+타입 변수[];
+```
+- 대괄호[] 는 배열 변수를 선언하는 기호
+- 타입은 배열에 저장될 데이터의 타입을 말한다.(int, double, String...)
+- 배열 역시 객체이기에 힙 영역에 생성되고 배열 변수는 힙 영역의 배열 객체를 참조한다.
+- 참조할 배열 객체가 없다면 null값으로 초기화 할 수 있다.
+
+#### 값 목록으로 배열 생성
+```
+데이터타입[] 변수 = {값0, 값1, 값2, ...};
+```
+![배열](./image/array.PNG)
+- 중괄호{}는 주어진 값들을 항목으로 가지는 배열 객체를 힙에 생성, 배열 객체의 번지를 리턴한다.
+- 배열 변수는 리턴된 번지를 저장함으로써 참조가 이루어진다.
+
+```
+타입[] 변수;
+변수 = {값0, 값1, 값2, 값3,...}; //컴파일 에러
+```
+- 배열 변수를 선언한 다음 다른 실행문에서 중괄호를 사용한 배열 생성은 허용되지 않는다.
+- 먼저 변수를 선언한 뒤에 나중에 배열을 생성해야 한다면 new 연산자를 사용해야한다.
+```
+타입[] 변수;
+변수 = new 타입[] {값0, 값1, 값2, 값3, ...};
+```
+- 메소드의 매개값이 배열일 경우도 마찬가지
+```
+public class ArrayExample2 {
+    public static void main(String[] args) {
+        int[] scores;
+        scores = new int[] {34,36,37,86};
+        int sum1 = 0;
+        for(int i = 0; i < scores.length; i++){
+            sum1 += scores[i];
+        }
+        System.out.println(sum1);
+        int sum2 = add(new int[] {34,36,37,86});
+//        int sum2 = add(scores);
+        System.out.println(sum2);
+    }
+    public static int add(int[] arrays){
+        int sum = 0;
+        for(int i = 0; i < arrays.length; i++){
+            sum += arrays[i];
+        }
+        return sum;
+    }
+}
+
+```
+- new 연산자를 사용하여 나중에 값을 저장할 배열을 미리 만들 수 있다.
+```
+타입[] 변수 = new 타입[길이];
+int[] array = new int[5]; //길이가 5인 int배열 생성. 기본값은 0
+```
+- new연산자로 배열을 처음 생성하면 자동적으로 기본값으로 생성이 된다.
+![arraydefault](./image/session-04-arrays-in-java-22-638.jpg)
+
+#### 배열의 길이
+- 배열에 저장할 수 있는 전체 항목 수
+```
+배열변수.length;
+```
+length는 읽기 전용 필드이며 값을 바꿀 수 없다.
+
+#### 커맨드 라인 입력
+```
+public static void main(String[] args){
+
+}
+```
+- 프로그램을 실행하기 위해 필요한 main()메서드의 매개값인 String[] args
+```
+javac 컴파일할 자바 파일.java
+java 클래스파일
+``` 
+터미널을 통해 위와 같이 자바 프로그램을 실행 하면 JVM은 길이가 0인 String 배열을 먼저 생성하고 main()메소드를 호출할 때 매개값으로 전달한다.
+
+```
+public class Test {
+  	public static void main(String[] args) {
+  		for(String str : args) {
+			System.out.println(str);
+		}
+  	}
+}
+
+```
+- 위의 코드를 작성 후
+```
+javac Test.java
+java Test this is a test
+```
+- 위의 코드를 터미널에서 실행하면 다음과 같은 결과가 나온다.
+```
+this
+is
+a
+test.
+```
+- main()메소드는 String[] args 매개변수를 통해 커맨드 라인에서 입력된 데이터의 수(길이)와 입력된 데이터(배열의 항목 값)를 알 수 있게된다.
+
+#### 다차원 배열
+- 일반적인 값의 목록으로 구성된 1차원 배열과는 달리 값들이 행과 열로 구성된 배열을 2차원 배열이라 한다.
+
+```
+int[][] arrays = new int[2][3] // 2 X 3 배열을 생성한다.
+arrays.length // 2 배열 A의 길이
+arrays[0].length // 3 배열 B의 길이
+arrays[1].length // 3 배열 C의 길이
+```
+![2darray](./image/2darray.png)
+- 1차원 배열을 이용해 2차원 배열을 구현하기 때문에 계단식 구조를 가질 수 있다.
+```
+int[][] arrays = new int[2][];
+arrays[0] = new int[2]; 0,1
+arrays[1] = new int[3]; 0,1,2
+
+arrays.length // 2 배열 A의 길이
+arrays[0].length // 2 배열 B의 길이
+arrays[1].length // 3 배열 C의 길이
+```
+- 이런 형태의 배열에서는 항상 배열의 정확한 길이를 알고 사용해야 한다.
+- 만약 존재하지 않는 배열의 인덱스를 사용하면 ArrayIndexOutOfBoundException을 발생시킨다.
+
+#### 객체를 참조하는 배열
+- 참조타입 배열(클래스, 인터페이스)은 각 항목에 주소를 가지고 있다. 즉 객체를 참조하는것이다.
+
+#### 배열복사
+- 배열은 한 번 생성하면 크기를 변경할 수 없다.
+- 만약 더 큰 저장 공간이 필요하다면 크기가 더 큰 배열을 만들어 이전 배열을 복사해야한다.
+- for loop를 사용할 수도 있고, System.arraycopy()를 사용할 수도 있다.
+```
+public class ArrayExample3 {
+    public static void main(String[] args) {
+        int[] array1 = {1,2,3};
+        int[] array2 = new int[5];
+        int[] array3 = new int[5];
+
+        for(int i = 0; i < array1.length; i++){
+            array2[i] = array1[i];
+        }
+
+        for(int i = 0; i < array2.length; i++){
+            System.out.print(array2[i]);
+        }
+
+        System.arraycopy(array1, 0, array3, 0, array1.length);
+        //System.arraycopy(원본배열, 원본배열에서 복사를 시작할 인덱스, 붙여넣을 배열, 새 배열에서 붙여넣을 시작 인덱스)
+        System.out.println();
+        for(int i = 0; i < array3.length; i++){
+            System.out.print(array3[i]);
+        }
+    }
+}
+
+```
+
+#### for loop
+```
+for(타입변수 : 배열){
+    실행문
+}
+```
+
+1. for 문이 처음 실행될 때 배열에서 가져올 첫번째 값이 있는지 확인한다.<br/>
+2. 존재한다면 해당 값을 타입변수에 저장하고 실행문을 실행한다.<br/>
+3. 실행문이 모두 완료되면 다시 루프를 돌아 배열에서 다음 값이 있는지 확인하고 값이 없다면 종료되고 값이 있다면 2로 돌아간다.<br/>
+```
+public class ArrayExample4 {
+    public static void main(String[] args) {
+        int[] array = {1,2,3,4,5,6};
+        String[] array2 = {"a","b", "c", "d", "e"};
+        for(int a:array){
+            System.out.println(a);
+        }
+        for(String b:array2){
+            System.out.println(b);
+        }
+    }
+}
+```
+
+
+
 
 
 [맨위로](https://github.com/irerin07/java_study#java-study)
+
+### 열거 타입
 
 ## 03 메모리 영역
 ![RuntimeDataArea](./image/RuntimeDataAreas.png)<br/>
