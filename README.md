@@ -265,14 +265,55 @@ public class ArrayExample4 {
     }
 }
 ```
+### 열거 타입
+- 한정된 값만을 갖는 데이터 타입 (enumeration type)
+- 주어진 몇가지의 열거 상수 중에서 하나의 상수를 저장하는 데이터 타입.
 
+#### 열거 타입의 선언
+- 열거 타입의 이름으로 소스 파일을 생성한다.
+- 소스파일의 내용은 다음과 같다.
+```
+public enum WEEK{
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
+}
+```
+#### 열거 타입 변수
+```
+열거타입 변수;
+Week today;
+Week reservationDay;
+```
+- 열거 타입 변수를 선언하면 열거 상수를 저장할 수 있다.
+- 열거 상수는 단독으로 사용불가
+```
+열거타입 변수 = 열거타입.열거상수;
+Week today = Week.SUNDAY;
+Week birthday = null;
+```
+- 참조 타입의 변수는 객체를 참조하는 변수다 -> 열거 상수 역시 객체다.
+![enum](./image/277DF73B56BB7A260D.png)
+- 월요일부터 일요일까지의 열거 상수는 다음과 같이 총 7개의 Week로 생성된다.
+- 메소드 영역에 생성된 열거 상수가 해당 Week를 각각 참조한다.
 
+![enum](./image/232F604556BB7BAF0F.png)
+```
+Week today = Week.SUNDAY;
+```
+- 열거타입 변수 today는 스택 영역에 생성된다.
+- today에 저장되는 값은 Week.SUNDAY 열거 상수가 참조하는 객체의 주소
+- 열거상수 Week.SUNDAY와 변수 today는 서로 같은 Week 객체를 참조
+
+#### 열거 객체의 메소드
 
 
 
 [맨위로](https://github.com/irerin07/java_study#java-study)
-
-### 열거 타입
 
 ## 03 메모리 영역
 ![RuntimeDataArea](./image/RuntimeDataAreas.png)<br/>
