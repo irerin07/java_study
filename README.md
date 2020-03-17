@@ -194,7 +194,7 @@ arrays.length // 2 배열 A의 길이
 arrays[0].length // 3 배열 B의 길이
 arrays[1].length // 3 배열 C의 길이
 ```
-![2darray](./image/2darray.png)
+![2darray](./image/2차원배열.PNG)
 - 1차원 배열을 이용해 2차원 배열을 구현하기 때문에 계단식 구조를 가질 수 있다.
 ```
 int[][] arrays = new int[2][];
