@@ -1,3 +1,5 @@
+package main.java.study.referencetype;
+
 public class ArrayExample2 {
     public static void main(String[] args) {
         int[] scores;

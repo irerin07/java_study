@@ -110,7 +110,7 @@ Boolean res = name1.equals(name2);
 ```
 - 메소드의 매개값이 배열일 경우도 마찬가지
 ```
-public class ArrayExample2 {
+public class main.java.study.referencetype.ArrayExample2 {
     public static void main(String[] args) {
         int[] scores;
         scores = new int[] {34,36,37,86};
@@ -216,7 +216,7 @@ arrays[1].length // 3 배열 C의 길이
 - 만약 더 큰 저장 공간이 필요하다면 크기가 더 큰 배열을 만들어 이전 배열을 복사해야한다.
 - for loop를 사용할 수도 있고, System.arraycopy()를 사용할 수도 있다.
 ```
-public class ArrayExample3 {
+public class main.java.study.referencetype.ArrayExample3 {
     public static void main(String[] args) {
         int[] array1 = {1,2,3};
         int[] array2 = new int[5];
@@ -252,7 +252,7 @@ for(타입변수 : 배열){
 2. 존재한다면 해당 값을 타입변수에 저장하고 실행문을 실행한다.<br/>
 3. 실행문이 모두 완료되면 다시 루프를 돌아 배열에서 다음 값이 있는지 확인하고 값이 없다면 종료되고 값이 있다면 2로 돌아간다.<br/>
 ```
-public class ArrayExample4 {
+public class main.java.study.referencetype.ArrayExample4 {
     public static void main(String[] args) {
         int[] array = {1,2,3,4,5,6};
         String[] array2 = {"a","b", "c", "d", "e"};
@@ -310,7 +310,59 @@ Week today = Week.SUNDAY;
 - 열거상수 Week.SUNDAY와 변수 today는 서로 같은 Week 객체를 참조
 
 #### 열거 객체의 메소드
+- 열거 객체는 열거 상수의 문자열을 내부 데이터로 가지고 있다.
+- 모든 열거 타입은 Enum 클래스를 상속받기에 Enum클래스에 선언된 메소드들을 사용할 수 있다.
 
+##### name()메소드
+- 열거 객체의 문자열을 반환한다.
+- 반환되는 문자열은 열거 타입을 정의할 때 사용한 상수 이름과 같다.
+```
+Week today = Week.SUNDAY;
+String name = today.name(); //SUNDAY를 반환
+```
+##### ordinal() 메소드
+- 열거 객체의 0부터 시작하는 순번을 반환한다.
+- 전체 열거 객체 중 몇 번째인지 알려준다.
+```
+Week today = Week.SUNDAY;
+int ordinal = today.ordinal(); // 6을 반환
+```
+
+##### compareTo() 메소드
+- 열거 객체를 비교해서 순번 차이를 반환
+- 매개 값으로 주어진 열거 객체를 기준으로 전후로 몇 번쨰 위치하는지 비교한다.
+```
+Week day1 = Week.Monday;
+Week day2 = Week.Wednesday;
+int result1 = day1.compareTo(day2); //-2
+int result2 = da2.compareTo(day1); //2
+```
+- 매개 값으로 주어진 열거 객채보다 순번이 빠르면 음수, 순번이 늦으면 양수를 반환한다.
+- 위의 예제에서는 day1이 day2 보다 앞에 위치하므로 result1은 음수를, result2를 양수를 반환한다.
+
+##### valueOf(String name)메소드
+- 주어진 문자열의 열거 객체를 반환
+- 매개값으로 주어진 문자열과 동일한 열거 객체를 반환
+```
+Week weekDay - Week.valueOf("SATURDAY");
+```
+##### values() 메소드
+- 모든 열거 객체들을 배열로 반환
+```
+Week[] days = Week.values();
+for(Week day: days){
+    System.out.println(day);
+}
+
+//MONDAY
+//TUESDAY
+//WEDNESDAY
+//THURSDAY
+//FRIDAY
+//SATURDAY
+//SUNDAY
+```
+- 배열의 인덱스는 열거 객체의 순번과 같고 각 인덱스 값은 해당 순번의 열거 객체의 주소이다.
 
 
 [맨위로](https://github.com/irerin07/java_study#java-study)
@@ -365,4 +417,9 @@ Class Loader가 아직 로드되지 않은 클래스를 찾으면 위와 같은 
     * 각 클래스와 인터페이스의 상수뿐만 아니라, 메서드와 필드에 대한 모든 레퍼런스까지 담고 있는 테이블
     * 즉, 어떤 메서드나 필드를 참조할 때 JVM은 런타임 상수 풀을 통해 해당 메서드나 필드의 실제 메모리상 주소를 찾아서 참조한다. 
 ![JvmInternal](./image/4ySVX.png)
+[맨위로](https://github.com/irerin07/java_study#java-study)
+
+## 04 클래스
+
+
 [맨위로](https://github.com/irerin07/java_study#java-study)
