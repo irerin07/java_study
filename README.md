@@ -422,5 +422,183 @@ Class Loader가 아직 로드되지 않은 클래스를 찾으면 위와 같은 
 
 ## 04 클래스
 
+### 객체 지향 프로그래밍 Object Oriented Programming OOP
+- 부품에 해당하는 객체를 먼저 만들고, 이 객체들을 조합해서 완성된 프로그램을 만드는 기법
+#### 객체
+- 실제로 존재하거나 추상적으로 생각할 수 있는 것들 중에서 자신의 속성을 가지고 있고 다른 것들과 식별이 가능한 것
+    * 실제로 존재하는 사람, 자동차, 책....
+    * 물리적으로 존재하지는 않지만 추상적으로 존재하는 학과, 강의, 주문....
+- 객체는 속성과 동작으로 구성
+    * 속성 - 필드
+    * 동작 - 메소드
+    
+#### 객체의 상호 작용
+- 객체와 객체간의 상호 작용으로 이루어진 현실 세계
+    * 사람은 계산기를 사용(입력값을 입력)
+    * 계산기는 입력받은 값을 사용하여 결과를 출력, 사람에게 알려준다.
+- 소프트웨어 역시 객체들은 서로 독립적이며 다른 객체들과 상호작용을 하면서 동작한다.
+- 객체가 다른 객체의 기능(메소드)을 사용하는 방법을 메소드 호출이라 하고 도트 연산자를 붙여 사용한다.
+    * 도트 연산자(.)는 객체의 필드와 메소드에 접근할 때 사용한다.
+```
+리턴값 = 객체.메소드();
+리턴값 = 객체.메소드(매개값1, 매개값2,.....);
+int result = Calculator.add(10, 20);
+Calculator객체의 add() 메소드에 매개값 10과 20을 넘겨주고 해당 메소드를 실행 한 뒤에 나온 결과를 result 변수에 저장한다.
+```
+
+#### 객체 간의 관계
+- 집합
+    * 집합 관계인 객체들 중 하나는 부품의 역할을 하고 하나는 완성품에 해당한다.
+    * 완성품인 자동차와 이를 구성하는 여러 부품들(타이어, 핸들, 엔진...)
+- 사용
+    * 객체간 상호작용을 의미한다.
+    * 객체는 다른 객체의 기능을 호출하여 원하는 결과를 얻는다.
+- 상속
+    * 상위(부모)객체를 기반으로 하위(자식)객체를 생성하는 관계
+    * 보통 상위 객체는 종류를 의미하고, 하위 객체는 구체적인 사물을 의미한다.(상위객체-대중교통, 하위객체-지하철, 버스, 기차...)
+
+* 객체 지향 프로그래밍은 만들고자 하는 객체를 모델링 하고, 집합관계의 부품 객체와 사용 관계에 있는 객체를 하나하나 설계한 후 조립하는 방식으로 프로그램을 개발하는 기법이다.
+
+#### 객체 지향 프로그래밍의 특징
+- 캡슐화
+    * 객체의 필드, 메소드를 하나로 묶고, 실제 구현 내용을 감추는 것.
+    * 클래스를 생성하는것이라 이해하면 쉽다. 다만 일반적인 클래스와 다른점이 있다는 것을 기억하자.
+        * 필드 변수 앞에 접근 제어자 private을 붙인다.
+        * 필드 변수에 값을 넣고 가져올 수 있는 메소드를 만든다. (Getter/Setter)
+    * 외부 객체는 해당 객체가 노출해서 제공하는 필드와 메소드만 이용할 수 있다.
+    
+- 상속
+    * 상위 객체가 자신이 가지고 있는 필드와 메소드를 하위 객체에게 물려주어 하위 객체가 사용할 수 있도록 하는것
+    * 상위 객체를 재사용함으로 하위 객체를 쉽고 빨리 설계할 수 있도록 도와준다.
+    * 코드의 중복을 줄여준다.
+    * 상위 객체의 수정으로 모든 하위 객체들의 수정 효과를 가져온다.
+    
+- 다형성
+    * 같은 타입이지만 실행 결과가 다앙햔 객체를 이용할 수 있는 성질
+    * 하나의 메소드나 클래스가 있을 때 이것들이 다양한 방법으로 동작하는 것을 의미
+        * 키보드의 키는 모두 다 같이 '누른다'는 방법이 있지만 같은 동작의 키라고 하더라도 실행의 목적이 다르다.
+        * ESC는 취소, Enter는 실행 등..
+    * 동일한 조작방법이지만 동작하는 방법은 다른것을 의미한다.
+```java
+//다형성의 예 Overloading
+class O{
+    public void a(int param){
+        System.out.println("숫자출력");
+        System.out.println(param);
+    }
+    public void a(String param){
+        System.out.println("문자출력");
+        System.out.println(param);
+    }
+}
+public class PolymorphismOverloadingDemo {
+    public static void main(String[] args) {
+        O o = new O();
+        o.a(1);;
+        o.a("one");
+    }
+}
+
+//숫자출력
+//1
+//문자출력
+//one
+//같은 o.a()를 실행했지만 매개값이 달라지면서 결과가 다르게 나온다.
+```
+
+```java
+class Car {
+    public void carHonk() {
+        System.out.println("자동차 경적 울리기");
+    }
+}
+class Bus extends Car{
+    public void busHonk() {
+        System.out.println("버스 경적 울리기");
+    }
+}
+
+public class Poly02 {
+    public static void main(String[] args) {
+        Car c = new Bus(); //클래스 Bus의 데이터 형이 클래스 Car
+        c.carHonk(); //자동차 경적 울리기
+//        c.busHonk(); //에러발생
+        Bus b1 = new Bus();
+
+        b1.carHonk(); //자동차 경적 울리기
+        b1.busHonk(); //버스 경적 울리기
+    }
+
+}
+```
+- 클래스 Bus의 데이터 형이 클래스 Car이다. 클래스 Bus는 클래스 Car를 상속하고 있다.
+    * Bus가 Car를 상속하기 때문에 클래스 Bus는 클래스 Car를 데이터 형으로 삼을 수 있다.
+-  c.carHonk();는 정상적으로 작동을 하지만 c.busHonk()는 에러가 발생한다.
+    * 분명 Bus클래스는 busHonk()라는 메소드를 가지고 있는데 실행이 되지 않는다.
+    - 하지만 Bus b1 = new Bus();라 선언한 뒤에는 모든 메소드가 문제없이 작동한다.
+- 즉 클래스 Bus의 데이터 형을 클래스 Car로 하면 클래스 Bus는 마치 클래스 Car인것처럼 동작하게 되는 것이다. 클래스 Bus를 사용하는 입장에서는 클래스 Bus를 클래스 Car인것처럼 사용하면 된다.
+
+```java
+class Car {
+    public void carHonk() {
+        System.out.println("자동차 경적 울리기");
+    }
+}
+class Bus extends Car{
+    public void carHonk() {
+        System.out.println("자동차(버스)의 경적을 울리기");
+    }
+    public void busHonk() {
+        System.out.println("버스 경적 울리기");
+    }
+}
+
+public class Poly02 {
+    public static void main(String[] args) {
+        Car c = new Bus();
+        c.carHonk(); //자동차(버스)의 경적을 울리기
+//        c.busHonk(); //에러발생
+    }
+}
+```
+- 클래스 Car의 메소드 carHonk를 클래스 Bus에서 오버라이딩하고 있다.
+    * 클래스 Bus의 데이터 타입을 클래스 Car로 인스턴스화 했을 때 클래스 Bus의 메소드 busHonk()는 마치 존재하지 않는 것처럼 실행되지 않았다. => 클래스 Bus가 클래스 Car화 되었다.
+    * 클래스 Bus의 데이터 타입을 클래스 Car로해서 인스턴스화 했을 때 클래스 Bus의 메소드 carHonk()를 실행하면 클래스 Car에서 정의된 메소드가 아니라 클래스 Bus에서 정의된 메소드가 실행 되었다. => 클래스 Bus의 기본적인 성질은 그대로 간직하고 있다.
+- 클래스 Bus를 클래스 Car의 데이터 타입으로 인스턴스화 했을 때 클래스 Car에 존재하는 맴버만이 클래스 Bus의 맴버가 된다. 동시에 클래스 Bus에서 오버라이딩한 맴버의 동작방식은 그대로 유지한다.
+
+```java
+class Car {
+    public void carHonk() {
+        System.out.println("자동차 경적 울리기");
+    }
+}
+class Bus extends Car{
+    public void carHonk() {
+        System.out.println("자동차(버스)의 경적을 울리기");
+    }
+    public void busHonk() {
+        System.out.println("버스 경적 울리기");
+    }
+}
+class Bus2 extends Car{
+    public void carHonk() {
+        System.out.println("자동차(버스2)의 경적을 울리기");
+    }
+}
+public class Poly02 {
+    public static void main(String[] args) {
+        Car c = new Bus();
+        Car c1 = new Bus2();
+
+        c.carHonk(); // 자동차(버스)의 경적을 울리기
+        c1.carHonk(); // 자동차(버스2)의 경적을 울리기
+
+    }
+}
+
+```
+-  서로 다른 클래스 Bus와 Bus2가 동일한 데이터 타입 Car로 인스턴스화 되었다.
+- 하지만 두 인스턴스의 메소드 x를 호출한 결과는 서로 다르다.
+    * 이것이 상속과 오버라이딩 그리고 형변환을 이용한 다형성이다.
 
 [맨위로](https://github.com/irerin07/java_study#java-study)
