@@ -785,7 +785,61 @@ public Korean(String name, String ssn) {
 
 
 #### 생성자 오버로딩
+- 자바는 다양한 방법으로 객체를 생성할 수 있도록 생성자 오버로딩을 제공한다.
+    * 매개 변수를 달리하는 생성자를 여럿 선언하는 것.
+    * 매개 변수의 타입, 개수, 순서가 다르도록 선언한다.
+    
+```java
+public class Computer{
+    Computer(){}
+    Computer(String cpu){}
+    Computer(String cpu, String graphicsCard){}
+    Computer(String cpu, String graphicsCard, int price){}
+}
+```
+- 주의할 점은 매개 변수의 타입과 개수 그리고 선언된 순서가 같은 경우 매개 변수 이름만 바꾼것은 오버로딩으로 볼 수 없다.
+```java
+public class Computer{
+    Computer(String cpu, String graphicsCard){}
+    Computer(String graphicsCard, String cpu){} //오버로딩이 아니다.
+}
+```
 
+- 생성자가 오버로딩 되어 있다면 new 연산자로 생성자를 호출할 때 제공되는 매개값의 타입과 수에 의해 호출될 생성자가 결정된다.
+```java
+Computer c1 = new Computer();
+Computer c2 = new Computer("3800x", "2080ti");
+Computer c3 = new Computer("i7-6700K", "1080ti", 1200000);
+```
+
+#### 다른 생성자 호출(this())
+- 생성자 오버로딩은 생성자 간의 중복된 코드를 발생시킨다. 
+- 이런 경우 필드 초기화 내용은 한 생성자에만 집중시키고 나머지 생성자는 초기화 내용을 가지고 있는 생성자를 호출하는 방식으로 개선할 수 있다.
+- this()는 자신의 다른 생성자를 호출하는 코드로 항상 생성자의 첫 줄에서만 허용된다.
+- this()의 매개값은 호출되는 생성자의 매개 변수 타입에 맞게 제공해야 한다.
+- this() 다음에는 추가적인 실행문들이 올 수 있다.
+```java
+public class Watch{
+    String company;
+    String model;
+    String color;
+    int price;
+    
+    Watch(){} //기본 생성자
+    
+    Watch(String model){ //생성자 1
+        this(model, "silver", "250"); //생성자 3 호출
+    }   
+    Watch(String model, String color){//생성자 2
+        this(model, color, 250); //생성자 3 호출
+    }
+    Watch(String model, String color, int price){ //생성자 3
+        this.model = model; //공통 실행 코드
+        this.color = color; //공통 실행 코드
+        this.price = price; //공통 실행 코드
+    }   
+}
+```
 
 
 3. 메소드
