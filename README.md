@@ -6,7 +6,7 @@
 2. [참조 타입](https://github.com/irerin07/java_study#02-%EC%B0%B8%EC%A1%B0-%ED%83%80%EC%9E%85)
 3. [메모리 영역](https://github.com/irerin07/java_study/blob/master/README.md#03-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%98%81%EC%97%AD)
 4. [클래스](https://github.com/irerin07/java_study/blob/master/README.md#04-%ED%81%B4%EB%9E%98%EC%8A%A4)
-
+5. [Call by Reference, Call by Value]();
 ## 01 JVM 자바 가상 머신
 자바 프로그램은 완전한 기계어가 아닌, 중간 단계의 바이트 코드라 이를 해석하고 실행해 줄 가상의 운영체제가 필요하다.<br/>
 이 역할을 수행하는 것이 JVM.<br/>
@@ -849,5 +849,15 @@ public class Watch{
     - 객체 간의 데이터 전달의 수단
     - 외부로부터 값을 받을수도 있고, 어떤 값을 반환할 수도 있다.
 
+
+[맨위로](https://github.com/irerin07/java_study#java-study)
+
+## 05 Call by Value, Call by Reference
+- Java는 Call by Value, Call by Reference 둘 중 무엇을 기본으로 하는가.
+- Java는 기본적으로 Call by Value
+- Call by Value
+    - 메소드로 값을 넘길 때 넘길 값을 복사하여(메모리에 새로 생성하여) 메소드의 인자로 전달하는 방식
+- Call by Reference
+    * 값을 복사하여 넘기는 것이 아닌 메소드로 넘길 값의 주소값(레퍼런스)를 매개변수로 전달한다.
 
 [맨위로](https://github.com/irerin07/java_study#java-study)
