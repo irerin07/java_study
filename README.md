@@ -777,7 +777,7 @@ Korean k1 = new Korean('Andrea', "011225-5484554");
         * this.은 객체 자신의 참조이다. 마치 우리가 우리 자신을 "나"라고 하듯이 객체가 객체 자신을 this라고 한다.
         * this.필드는 this라는 참조 변수로 필드를 사용하는 것과 동일하다.
 ```java
-public Korean(String name, String ssn) {
+public class Korean(String name, String ssn) {
     this.name = name;
     this.ssn = ssn;
 }
