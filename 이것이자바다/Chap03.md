@@ -6,7 +6,7 @@ boolean result = (a+b) < 5;
 ```
 
 #### 3.2 방향과 우선순위
-![](../image/0_CF6P_KeLjetU2sOo_.png)
+![image](../image/0_CF6P_KeLjetU2sOo_.png)
 
 #### 3.3 단항 연산자
 ##### 3.3.1 부호연산자(+,-)
