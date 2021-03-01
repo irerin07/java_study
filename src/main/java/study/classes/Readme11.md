@@ -315,14 +315,14 @@ public class EnumExample {
 - 타입이 일치해야 안전하다. 즉, String 타입에는 String 타입이 와야 한다는 것이다. 
 - 같은 이름을 가진 상수라도 타입이 다르면 막아내는 것이 type-safety라고 볼 수 있다.
 
-###### EnumSet에 new 연산자를 사용하지 않는 이유
+#### EnumSet에 new 연산자를 사용하지 않는 이유
 참고 : https://siyoon210.tistory.com/152
 
 - EnumSet은 다른 컬렉션들과 달리 new 연산자를 사용할 수 없다. 단지 정적 팩토리 메서드(static factory method)만으로 EnumSet의 구현 객체를 반환받을 수 있다. 왜 그럴까?
 
 - EnumSet의 내부를 살펴보면 abstract 클래스, 추상클래스라는 것을 알 수 있다. 즉, EnumSet은 추상클래스이기 때문에 객체로써 생성 및 사용이 불가능한 것이다.
 
-- 왜 이렇게 만들었을고?
+##### **이렇게 만든 이유?**
 1.사용자 편의성 - (사용자는 어떤 구현 객체가 적합한지 몰라도 상관없다)
 - RegularEnumSet은 원소의 갯수가 적을 때 적합하고, JumboEnumSet은 원소의 갯수가 많을때 적합하지만, 이는 EnumSet의 구현체들을 모두 알고 있는 사용자가 아니라면 난해한 선택지가 될 수도 있다. 하지만 EnumSet을 가장 잘 알고 있는 EnumSet 개발자가 적절한 구현 객체를 반환해준다면 EnumSet을 사용하는 입장에서는 어떤 구현체가 적합한지 고려하지 않아도 된다.
 
