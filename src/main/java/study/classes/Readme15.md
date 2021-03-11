@@ -606,3 +606,5 @@ public class PredicateSample3 {
 // 결과
 // isEqual.test("TheWing") = true
 ```
+
+##### 쉐도잉
