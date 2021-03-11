@@ -402,7 +402,39 @@ String, int 두 개를 받는 생성자 : ConstructorRefTest{name='xxxelppa', ag
   - 불변 상태로 만들면 지역 변수에 대해 변하지 않는 상수를 사용하지 때문에 동일한 입력에 대해 동일한 결과를 기대할 수 있다. -> side effect가 없다.
   - 동일한 입력에 대해 동인한 결과를 받을 수 있다.
   - 다수의 쓰레드가 동시에 공유 해서 사용한다 하더라도 일관된 결과를 받아볼 수 있다는 것.
+```
+public class Exam_009 {
+    public static void main(String[] args) {
+ 
+        // 변수에 저장
+        MyInterface mi = () -> System.out.println("변수에 저장 된 람다식");
+        mi.print();
+ 
+        // 매개변수로 전달
+        doProc(() -> System.out.println("매개변수로 전달 된 람다식"));
+ 
+        // 반환 값으로 사용
+        getProc().print();
+    }
+ 
+    public static void doProc(MyInterface mi) {
+        mi.print();
+    }
+ 
+    public static MyInterface getProc() {
+        return () -> System.out.println("반환 값으로 사용 된 람다식");
+    }
+}
+ 
+interface MyInterface {
+    void print();
+}
+//변수에 저장 된 람다식
 
+//매개변수로 전달 된 람다식
+
+//반환 값으로 사용 된 람다식
+```
 ###### INVOKEDYNAMIC CALL
 - indy가 호출되면 bootstrap 영역의 lambdafactory.metafactory()를 수행
   - lambdafactory.metafactory() -> java runtime library의 표준화 method
