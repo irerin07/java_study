@@ -207,7 +207,24 @@ interface LambdaTest_003 {
   - (java 1.7 까지는 final 을 반드시 명시 했어야 했고, final 을 생략하고 쓸 수 있는 건 java 1.8 부터로 기억한다.)
 - final 키워드의 유무에 따라 복사 위치가 달라진다고 한다.
 
-
+- Local Variable Capture
+- Local Variable은 조건이 final 혹은 effectivelt final
+  - 초기화 된 이후 값이 한 번도 변경되지 않았다는 것으로 final이 붙은 것과 동일하게 컴파일시에 처리된다.
+  - **초기화하고 값이 변경되지 않은 것**
+- 왜 이런 제약 조건(final같은)이 있는건가
+  - 지역 변수는 쓰레드끼리 공유가 안된다.
+  - JVM에서 인스턴스 변수는 힙 영역에 생성된다.
+  - 인스턴스 변수는 쓰레드끼리 공유가 가능하다.
+  - **결론적으로 지역 변수가 스택에 저장되기 때문에 람다식에서 값을 바로 참조하는 것에 제약이 있어 복사된 값을 사용하는데 <br/> 이때 멀티 쓰레드 환경에서 변경이 되면 동시성에 대한 이슈를 대응하기 힘들기 때문.
+```
+Supplier<Integer> incrementer(int start) {
+  return () -> start++;
+}
+```
+- 위 코드는 컴파일이 되지 않는다.
+- start는 지역 변수이고 람다식 내부에서 변경을 하려 하지만 람다는 start의 값을 캡쳐하여 복사본을 만들기 때문에 컴파일이 불가능하다.
+- 변수를 final 값으로 지정하면 람다 내에서 start를 증가 시키면 실제로 메소드내의 start인자가 수정될 수 있다.
+  
 ###### 메소드, 생성자 레퍼런스
 
 - 메소드, 생성자 레퍼런스는 람다식을 더 간략하게 표현할 수 있게 해준다.
@@ -221,6 +238,12 @@ interface LambdaTest_003 {
 3. 람다식의 매개변수로 접근 가능한 메소드 참조 : 매개변수의_타입_클래스_이름::메소드_이름
 
 4. 생성자 참조 :  클래스_이름::new
+
+|             종류            |            람다            |      메서드 참조     |   |   |
+|:---------------------------:|:--------------------------:|:--------------------:|---|---|
+| static 메서드 레퍼런스      | (x) -> ClassName.method(x) | 클래스이름::메서드   |   |   |
+| 동일 영역 인스턴스의 메서드 | (o1, o2) -> o1.method(o2)  | 클래스이름:메서드    |   |   |
+| 외부 영역 인스턴스의 메서드 | (x)-> extObj.method(x)     | 인스턴스변수::메서드 |   |   |
 
 
 - 1, 2, 3번에 해당하는 예제
@@ -364,3 +387,190 @@ String, int 두 개를 받는 생성자 : ConstructorRefTest{name='xxxelppa', ag
 ```
 
 
+###### 1급 시민, 1급 객체 (First-class citizen)
+- 아래 세가지 조건을 만족한다면 1급 객체에 해당한다.
+  1. 변수에 할당 할 수 있다.
+  2. 매개변수로 사용할 수 있다.
+  3. 반환 값으로 사용할 수 있다.
+
+- 자바의 람다식은 변수에 담을 수 있고, 매개변수로 전달이 가능하며 반환 값으로도 사용할 수 있다.
+- 람다가 1급 객체이기에 가지는 장점은 다음과 같다
+  - heap 영역에 생성된 객체가 stack 영역의 변수를 인정적으로 사용하기 위해 final 또는 final 성격을 가져야 한다.
+  - 변할 수 있는 것을 변하지 않도록 만드는 것 (불변상태)
+  - 즉 외부 상태에 독립적이다.
+  - Variable Capture를 통해 람다식 내부에서 사용하는 지역 변수에 대해 final이어야 하는 이유도 같은 맥락이다.
+  - 불변 상태로 만들면 지역 변수에 대해 변하지 않는 상수를 사용하지 때문에 동일한 입력에 대해 동일한 결과를 기대할 수 있다. -> side effect가 없다.
+  - 동일한 입력에 대해 동인한 결과를 받을 수 있다.
+  - 다수의 쓰레드가 동시에 공유 해서 사용한다 하더라도 일관된 결과를 받아볼 수 있다는 것.
+
+###### INVOKEDYNAMIC CALL
+- indy가 호출되면 bootstrap 영역의 lambdafactory.metafactory()를 수행
+  - lambdafactory.metafactory() -> java runtime library의 표준화 method
+  - 어떤 방법으로 객체를 생성할지 dynamic하게 결정한다.
+    - 클래스를 새로 생성, 재사용, 프록시, 래퍼클래스 등등 성능 향상을 위한 최적화된 방법을 사용
+- java.lang.invoke.CallSite 객체를 반환
+  - LambdaMetafactory - 이렇게 되어있는 곳의 끝에 CallSite객체를 리턴
+  - 해당 람다의 lambdafactory, MethodHandle을 멤버변수로 가지게 된다.
+  - 람다가 변환되는 함수 인터페이스의 인스턴스를 반환한다.
+  - 한 번만 생성되고 재 호출시 재사용이 가능하다.
+
+#### Suppliers
+- Supplier<T>: 인자를 받지 않고 T타입의 객체를 리턴
+
+```
+  public interface Supplier<T> {
+    T get();
+  }
+```
+
+```
+public class supplierSample{
+  public static void main(String[] args){
+    Supplier<String> s = () -> "Supplier Sample";
+    String getSupplier = supplier.get();
+    System.our.println("getSupplier = " + getSupplier");
+  }
+}
+//결과
+//getSupplier = Supplier
+```
+
+#### Consumer
+- Consumer<T>: T타입의 객체를 인자로 받고 리턴 값은 없다.
+
+```
+public class ConsumerTest {
+  public static void main(String[] args){
+    Consumer<String> print = str -> System.out.println("this is " + str + " Interface");
+    print.accept("Consumer");
+  }
+}
+//결과
+//this is Consumer Interface
+
+//andThen()을 사용하면 두개 이상의 Consumer를 사용할 수 있다.
+public class ConsumerTest {
+  public static void main(String[] args){
+    Consumer<String> print = str -> System.out.println("this is " + str + " Interface");
+    Consumer<String> print1 = str -> System.out.println("ok");
+    print.andThen(print1).accept("Consumer");
+  }
+}
+//결과
+//this is Consumer Interface
+//ok
+```
+#### Function
+- Function<T, R> 는 T 타입의 인자를 받아, R 타입의 객체로 리턴한다
+```
+public interface Function<T, R> {
+    R apply(T t);
+
+    default <V> Function<V, R> compose(Function<? super V, ? extends T> before) {
+        Objects.requireNonNull(before);
+        return (V v) -> apply(before.apply(v));
+    }
+
+    default <V> Function<T, V> andThen(Function<? super R, ? extends V> after) {
+        Objects.requireNonNull(after);
+        return (T t) -> after.apply(apply(t));
+    }
+
+    static <T> Function<T, T> identity() {
+        return t -> t;
+    }
+}
+```
+```
+public class FunctionSample {
+    public static void main(String[] args) {
+        Function<Integer, Integer> add = (value) -> value + value;
+        Integer result = add.apply(5);
+        System.out.println("result = " + result);
+    }
+}
+// 결과
+// result = 10
+```
+```
+public class FunctionSample2 {
+    public static void main(String[] args) {
+        Function<Integer, Integer> add = (value) -> value + 2;
+        Function<Integer, Integer> sub = (value) -> value - 2;
+
+        Function<Integer, Integer> addAndSub = add.compose(sub);
+        Integer result = addAndSub.apply(10);
+        System.out.println("result = " + result);
+    }
+}
+// 결과
+// result = 10
+```
+
+#### Predicate
+- Predicate<T> 는 T타입 인자를 받고 결과로 boolean으로 리턴한다
+
+```
+  public interface Predicate<T> {
+    boolean test(T t);
+
+    default Predicate<T> and(Predicate<? super T> other) {
+        Objects.requireNonNull(other);
+        return (t) -> test(t) && other.test(t);
+    }
+
+    default Predicate<T> negate() {
+        return (t) -> !test(t);
+    }
+
+    default Predicate<T> or(Predicate<? super T> other) {
+        Objects.requireNonNull(other);
+        return (t) -> test(t) || other.test(t);
+    }
+
+    static <T> Predicate<T> isEqual(Object targetRef) {
+        return (null == targetRef)
+                ? Objects::isNull
+                : object -> targetRef.equals(object);
+    }
+}
+```
+```
+public class PredicateSample {
+
+    public static void main(String[] args) {
+        Predicate<Integer> isSmallerThan = num -> num < 10;
+        System.out.println("5는 10보다 작은지? -> "+ isSmallerThan.test(5));
+    }
+}
+// 결과
+// 5는 10보다 작은지? -> true
+```
+```
+//and() 와 or() 는 다른 Predicate와 함께 사용이 가능하다.
+public class PredicateSample2 {
+    public static void main(String[] args) {
+        Predicate<Integer> isBiggerThan = num -> num > 20;
+        Predicate<Integer> isSmallerThan = num -> num < 10;
+        System.out.println(isBiggerThan.and(isSmallerThan).test(15));
+        System.out.println(isBiggerThan.or(isSmallerThan).test(5));
+    }
+}
+
+// 결과
+// false
+// true
+```
+```
+//isEqual() 는 static 메소드이고 인자로 전달되는 객체와 같은지 체크하여 객체를 만들어준다
+public class PredicateSample3 {
+
+    public static void main(String[] args) {
+        Predicate<String> isEqual = Predicate.isEqual("TheWing");
+        System.out.println("isEqual.test(\"TheWing\") = " + isEqual.test("TheWing"));
+    }
+
+}
+// 결과
+// isEqual.test("TheWing") = true
+```
